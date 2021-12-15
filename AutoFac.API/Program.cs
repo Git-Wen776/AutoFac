@@ -1,4 +1,4 @@
-
+using AutoFac.Extentions;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoFac.API;
@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using AutoFac.Extentions.Redis;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,11 +35,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 //builder.Services.AddScoped<ITestService,TestService>();
 builder.Services.AddScoped<BlogContext>(p=> new BlogContext(config.GetConnectionString("BlogDB")));
-
+builder.Services.AddAppsettingSetup();
+builder.Services.AddRediWorkSetup();
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(container =>
 {
-   
+  
 });
 
 
