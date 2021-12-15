@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="CastService.cs" />
+    <Compile Remove="ICastService.cs" />
+    <Compile Remove="ITestService.cs" />
+    <Compile Remove="IUserService.cs" />
+    <Compile Remove="TestService.cs" />
+    <Compile Remove="UserServiceLpm.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AutoFac.Repository\AutoFac.Repository.csproj" />
+  </ItemGroup>
+
+</Project>
