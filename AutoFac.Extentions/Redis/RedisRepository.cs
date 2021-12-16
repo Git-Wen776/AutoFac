@@ -25,5 +25,10 @@ namespace AutoFac.Extentions.Redis
         {
             return db.Database;
         }
+
+        public bool IsConnected()
+        {
+            return _work.IsConnected();
+        }
     }
 }

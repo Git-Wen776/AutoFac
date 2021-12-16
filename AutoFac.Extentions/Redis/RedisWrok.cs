@@ -57,6 +57,11 @@ namespace AutoFac.Extentions.Redis
                 }
             }
         }
+
+        public bool IsConnected()
+        {
+            return _redis.IsConnected;
+        }
     }
 
     public static class RedisWordSetup

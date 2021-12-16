@@ -10,5 +10,6 @@ namespace AutoFac.Extentions.Redis
     public interface IRedisWork
     {
         IDatabase _redisDb { get;}
+        bool IsConnected();
     }
 }

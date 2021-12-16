@@ -9,5 +9,6 @@ namespace AutoFac.Extentions.Redis
     public interface IRedisRepository
     {
         int DatabaseIndex();
+        bool IsConnected();
     }
 }
