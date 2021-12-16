@@ -23,7 +23,7 @@ namespace AutoFac.API.Controllers
         public ActionResult GetTest()
         {
             _logger.LogInformation($"当前redis数据库索引为{_redis.DatabaseIndex()}");
-            return Ok();
+            return Ok(_redis.DatabaseIndex());
         }
         [HttpGet(Name ="CastId")]
         public ActionResult CastId(int id)
