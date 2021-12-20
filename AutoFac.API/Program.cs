@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using AutoFac.Extentions.Redis;
+using AutoFac.Extentions.AutoMapperConfig;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,6 +38,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<BlogContext>(p=> new BlogContext(config.GetConnectionString("BlogDB")));
 builder.Services.AddAppsettingSetup();
 builder.Services.AddRediWorkSetup();
+builder.Services.AddAutoMapperSetup();
+builder.Services.AddAutoMapperSetup();
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(container =>
 {
