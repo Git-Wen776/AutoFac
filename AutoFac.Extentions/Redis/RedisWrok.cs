@@ -18,14 +18,14 @@ namespace AutoFac.Extentions.Redis
         public IDatabase _redisDb { get {
                 return _db;
             } }
-        private readonly IDatabase _db;
+        private  IDatabase _db;
 
         public RedisWrok(Appsetting app,ILogger<RedisWrok> logger)
         {
             _app = app;
             _logger = logger;
             var connect = _app.settingStr(new string[] {"RedisConnect","connectStr" });
-            if(connect is null)
+            if(string.IsNullOrEmpty(connect))
                 throw new ArgumentException(nameof(connect));
             RedisInit(connect);
             _db=_redis.GetDatabase();
@@ -45,10 +45,12 @@ namespace AutoFac.Extentions.Redis
                             DefaultDatabase = 1,
                             AbortOnConnectFail = false,
                             ConnectRetry = 4,
+                            ClientName="wen",
                             Password = "123456",
                             ConnectTimeout = 3,
-                            EndPoints = {connect}
+                            EndPoints = { { connect } }
                         };
+                        _logger.LogInformation($"redis config is {connect}");
                         _redis=ConnectionMultiplexer.Connect(options);
                         if (!_redis.IsConnected)
                             _logger.LogWarning("redis未连接");
@@ -61,6 +63,11 @@ namespace AutoFac.Extentions.Redis
         public bool IsConnected()
         {
             return _redis.IsConnected;
+        }
+
+        public void ChangeDb(int index)
+        {
+            _db=_redis.GetDatabase(index);
         }
     }
 

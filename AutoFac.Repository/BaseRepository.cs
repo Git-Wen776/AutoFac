@@ -34,7 +34,7 @@ namespace AutoFac.Repository
             return await this.DeleteAsync(t);
         }
 
-        public Task<int> ExecutQuery(string sql, List<SqlParameter> parameters)
+        public  Task<int> ExecutQuery(string sql, List<SqlParameter> parameters)
         {
             if(string.IsNullOrEmpty(sql)||parameters is null)
                 throw new ArgumentNullException(nameof(sql));
@@ -77,10 +77,9 @@ namespace AutoFac.Repository
 
         public IQueryable Query(Expression<Func<T, bool>> expression, PageModel pageModel)
         {
-            if(expression is null)
-                throw new ArgumentNullException (nameof(expression));   
-            return _context.Set<T>().Where(expression)
-                .Take(pageModel.Size).Skip(pageModel.Size*(pageModel.Page-1));
+            if(expression is null || pageModel is null)
+                throw new ArgumentNullException ($"{nameof(expression)} or {nameof(pageModel)} is null");   
+            return _context.Set<T>().Where(expression).EntityCorePage(pageModel);
         }
 
         public IQueryable Query(string sql, List<SqlParameter> parameters)
@@ -90,12 +89,27 @@ namespace AutoFac.Repository
             return _context.Set<T>().FromSqlRaw(sql, parameters);
         }
 
-        public Task<int> UpdateAsync(T entity)
+        public  Task<int> UpdateAsync(T entity)
         {
             if (entity is null)
                 throw new ArgumentNullException(nameof(entity));
             _context.Set<T>().Update(entity);
             return _context.SaveChangesAsync(); 
+        }
+
+        /// <summary>
+        /// 简单的导航查询
+        /// </summary>
+        /// <typeparam name="TProperty"></typeparam>
+        /// <param name="where"></param>
+        /// <param name="include"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public IQueryable Query<TProperty>(Expression<Func<T,bool>> where,Expression<Func<T, TProperty>> include)
+        {
+            if (where is null || include is null)
+                throw new ArgumentNullException($"{nameof(where)} or {nameof(include)} is null");
+            return _context.Set<T>().Where(where).Include(include);
         }
     }
 }

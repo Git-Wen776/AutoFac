@@ -11,5 +11,6 @@ namespace AutoFac.Extentions.Redis
     {
         IDatabase _redisDb { get;}
         bool IsConnected();
+        void ChangeDb(int index);
     }
 }

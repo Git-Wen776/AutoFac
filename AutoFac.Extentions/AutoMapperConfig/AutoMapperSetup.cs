@@ -13,17 +13,14 @@ namespace AutoFac.Extentions.AutoMapperConfig
     {
         public static void AddAutoMapperSetup(this IServiceCollection service)
         {
-            
             service.AddAutoMapper(p =>
-            {
+            {    
                 var profiles = Assembly.GetExecutingAssembly().GetTypes().
-                Where(p => p.BaseType == typeof(AutoMapperProfile<,>) && p.Name.EndsWith("Profile"));
+                Where(a=>a.Name.EndsWith("Profile"));
                 foreach (var profile in profiles)
                 {
                     p.AddProfile(profile);
                 }
-
-                p.AddProfile<UserProfile>();
                 p.SourceMemberNamingConvention = new PascalCaseNamingConvention();
             });
         }

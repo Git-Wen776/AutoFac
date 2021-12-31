@@ -59,6 +59,5 @@ namespace AutoFac.Extentions
         {
             services.AddSingleton<Appsetting>();
         }
-
     }
 }

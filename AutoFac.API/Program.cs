@@ -12,9 +12,21 @@ using Microsoft.Extensions.Logging;
 using System;
 using AutoFac.Extentions.Redis;
 using AutoFac.Extentions.AutoMapperConfig;
-using System.Reflection;
+using NLog.Web;
+using NLog.Extensions.Logging;
+using AutoFac.Extentions.NLogger;
+using Quartz;
+using GZY.Quartz.MUI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Logging.ClearProviders();
+builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+builder.Host.UseNLog();
+builder.Services.AddLogging(p => {
+    p.AddConsole();
+    p.AddNLog();
+});
 
 // Add services to the container.
 var config = new ConfigurationBuilder()
@@ -28,7 +40,6 @@ var config = new ConfigurationBuilder()
     .Build();
 builder.Services.AddLogging(p => { 
  p.AddConsole();
- 
 });
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -39,7 +50,14 @@ builder.Services.AddScoped<BlogContext>(p=> new BlogContext(config.GetConnection
 builder.Services.AddAppsettingSetup();
 builder.Services.AddRediWorkSetup();
 builder.Services.AddAutoMapperSetup();
-builder.Services.AddAutoMapperSetup();
+builder.Services.AddLoggerSetup();
+#region quartzÒÔ¼°quartz uiÅäÖÃ
+builder.Services.AddQuartz(p=> { });
+builder.Services.AddQuartzServer(p => {
+   
+});
+builder.Services.AddQuartzUI();
+#endregion
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(container =>
 {
@@ -57,6 +75,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseRouting();
+//app.UseQuartz();
 
 app.UseAuthorization();
 
