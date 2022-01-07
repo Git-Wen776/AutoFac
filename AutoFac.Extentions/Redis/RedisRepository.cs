@@ -25,6 +25,10 @@ namespace AutoFac.Extentions.Redis
         {
             return db.Database;
         }
+        public Task<RedisValue> strGet(string key)
+        {
+            return db.StringGetAsync(key);
+        }
 
         public bool IsConnected()
         {

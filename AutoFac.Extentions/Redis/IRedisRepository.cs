@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StackExchange.Redis;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +11,6 @@ namespace AutoFac.Extentions.Redis
     {
         int DatabaseIndex();
         bool IsConnected();
+        Task<RedisValue> strGet(string key);
     }
 }

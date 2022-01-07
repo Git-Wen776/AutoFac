@@ -17,6 +17,7 @@ using NLog.Extensions.Logging;
 using AutoFac.Extentions.NLogger;
 using Quartz;
 using GZY.Quartz.MUI.Extensions;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +50,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<BlogContext>(p=> new BlogContext(config.GetConnectionString("BlogDB")));
 builder.Services.AddAppsettingSetup();
 builder.Services.AddRediWorkSetup();
+builder.Services.AddStackExchangeRedisCache(p =>
+{
+    Console.WriteLine(config.GetSection("RedisConnect:conncetStr").Value);
+    p.Configuration = "82.157.50.112:1545";
+    p.InstanceName = "Aw";
+});
 builder.Services.AddAutoMapperSetup();
 builder.Services.AddLoggerSetup();
 #region quartz“‘º∞quartz ui≈‰÷√

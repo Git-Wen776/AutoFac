@@ -40,6 +40,7 @@ namespace AutoFac.Extentions.Redis
                 {
                     if(_redis is null)
                     {
+                        _logger.LogInformation($"redis config is {connect}");
                         ConfigurationOptions options = new ConfigurationOptions()
                         {
                             DefaultDatabase = 1,
@@ -48,9 +49,10 @@ namespace AutoFac.Extentions.Redis
                             ClientName="wen",
                             Password = "123456",
                             ConnectTimeout = 3,
-                            EndPoints = { { connect } }
+                            EndPoints = {
+                                { connect}
+                            }
                         };
-                        _logger.LogInformation($"redis config is {connect}");
                         _redis=ConnectionMultiplexer.Connect(options);
                         if (!_redis.IsConnected)
                             _logger.LogWarning("redis未连接");
@@ -80,3 +82,4 @@ namespace AutoFac.Extentions.Redis
         }
     }
 }
+ 

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using AutoFac.Extentions.Redis;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Threading.Tasks;
 
 namespace AutoFac.API.Controllers
 {
@@ -12,11 +14,13 @@ namespace AutoFac.API.Controllers
     {
         private readonly ILogger<TestController> _logger;
         private readonly IRedisRepository _redis;
+        private readonly IDistributedCache _cache;
 
-        public TestController(ILogger<TestController> logger ,IRedisRepository redis)
+        public TestController(ILogger<TestController> logger ,IRedisRepository redis, IDistributedCache cache)
         {
             _logger = logger;
             _redis = redis;
+            _cache = cache;
         }
 
         [HttpGet(Name ="GetTest")]
@@ -34,5 +38,37 @@ namespace AutoFac.API.Controllers
             //_logger.LogInformation(_cureent.CurrentStr());
             return Ok(id);
         }
+        [HttpGet(Name = "GetRediskey")]
+        public async Task<ActionResult> GetRediskey()
+        {
+            string p = await _cache.GetStringAsync("person");
+            if (string.IsNullOrEmpty(p))
+                _logger.LogWarning("缓存不存在");
+            await _cache.SetStringAsync("person", "ma");
+            
+            p = await _cache.GetStringAsync("person");
+            return Ok(p);
+        }
+        [HttpGet(Name = "Rediskey")]
+        public async Task<ActionResult> Rediskey()
+        {
+            string p= await _redis.strGet("person");
+            return Ok(p);
+        }
+
+        [HttpGet(Name = "SetRediskey")]
+        public async Task<ActionResult> SetRediskey() {
+            await _cache.SetStringAsync("pm", "laoma");
+            return Ok(await _cache.GetStringAsync("pm"));
+        }
+
+        [HttpGet(Name = "SetCahce")]
+        public async Task<ActionResult> SetCahce() {
+            var t= await _cache.GetOrCreateAsync<string>("wen", 
+              async (p) => { return await _redis.strGet("person"); }
+            ,10,3);
+            return Ok(t);
+        }
+
     }
 }
