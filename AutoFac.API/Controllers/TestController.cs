@@ -45,7 +45,6 @@ namespace AutoFac.API.Controllers
             if (string.IsNullOrEmpty(p))
                 _logger.LogWarning("缓存不存在");
             await _cache.SetStringAsync("person", "ma");
-            
             p = await _cache.GetStringAsync("person");
             return Ok(p);
         }

@@ -1,7 +1,6 @@
 using AutoFac.Extentions;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using AutoFac.API;
 using AutoFac.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -17,7 +16,6 @@ using NLog.Extensions.Logging;
 using AutoFac.Extentions.NLogger;
 using Quartz;
 using GZY.Quartz.MUI.Extensions;
-using Microsoft.Extensions.Caching.StackExchangeRedis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,7 +50,6 @@ builder.Services.AddAppsettingSetup();
 builder.Services.AddRediWorkSetup();
 builder.Services.AddStackExchangeRedisCache(p =>
 {
-    Console.WriteLine(config.GetSection("RedisConnect:conncetStr").Value);
     p.Configuration = "82.157.50.112:1545";
     p.InstanceName = "Aw";
 });
