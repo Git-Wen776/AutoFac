@@ -10,17 +10,17 @@ namespace AutoFac.Models
 {
     public class BlogContext:DbContext
     {
-        private readonly string connectionstring;
+        //private readonly string connectionstring;
         public DbSet<User> Users { get; set; }
-        public BlogContext(string _connectionstring)
+        public BlogContext(DbContextOptions<BlogContext> options):base(options)
         {
-            connectionstring = _connectionstring;
+           // connectionstring = _connectionstring;
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder builder)
-        {
-            builder.EnableSensitiveDataLogging().UseSqlServer(connectionstring);
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder builder)
+        //{
+        //    builder.EnableSensitiveDataLogging().UseSqlServer(connectionstring);
+        //}
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

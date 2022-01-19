@@ -16,6 +16,8 @@ using NLog.Extensions.Logging;
 using AutoFac.Extentions.NLogger;
 using Quartz;
 using GZY.Quartz.MUI.Extensions;
+using Microsoft.EntityFrameworkCore;
+using AutoFac.Quartz;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,7 +34,7 @@ var config = new ConfigurationBuilder()
     .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
     .Add(new JsonConfigurationSource()
     {
-        Path = "appsetings.json",
+        Path = "appsettings.json",
         Optional = true,
         ReloadOnChange = true
     })
@@ -41,11 +43,20 @@ builder.Services.AddLogging(p => {
  p.AddConsole();
 });
 builder.Services.AddControllers();
+builder.Services.AddCors(options => {
+    options.AddPolicy("Aw.CorsPolicy", p => {
+        p.AllowAnyOrigin();
+        p.AllowAnyHeader();
+        p.AllowAnyMethod();
+    });
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 //builder.Services.AddScoped<ITestService,TestService>();
-builder.Services.AddScoped<BlogContext>(p=> new BlogContext(config.GetConnectionString("BlogDB")));
+//builder.Services.AddScoped<BlogContext>(p=> new BlogContext(config.GetConnectionString("BlogDB")));
+builder.Services.AddDbContext<BlogContext>(
+        options => options.UseSqlServer(config.GetSection("ConnectionStrings:BlogDB").Value));
 builder.Services.AddAppsettingSetup();
 builder.Services.AddRediWorkSetup();
 builder.Services.AddStackExchangeRedisCache(p =>
@@ -53,6 +64,7 @@ builder.Services.AddStackExchangeRedisCache(p =>
     p.Configuration = "82.157.50.112:1545";
     p.InstanceName = "Aw";
 });
+builder.Services.AddScoped(typeof(IJobService),typeof(JobService));
 builder.Services.AddAutoMapperSetup();
 builder.Services.AddLoggerSetup();
 #region quartz“‘º∞quartz ui≈‰÷√
@@ -81,7 +93,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 //app.UseQuartz();
-
+app.UseCors("Aw.CorsPolicy");
 app.UseAuthorization();
 
 app.MapControllers();
