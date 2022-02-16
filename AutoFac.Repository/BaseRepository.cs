@@ -84,8 +84,9 @@ namespace AutoFac.Repository
 
         public IQueryable Query(string sql, List<SqlParameter> parameters)
         {
-            if (string.IsNullOrEmpty(sql) || parameters is null)
-                throw new ArgumentNullException(nameof(sql));
+
+                if (string.IsNullOrEmpty(sql) || parameters is null)
+                    throw new ArgumentNullException(nameof(sql));
             return _context.Set<T>().FromSqlRaw(sql, parameters);
         }
 

@@ -28,7 +28,7 @@ namespace AutoFac.API.Controllers
         {
             if (_redis.IsConnected())
                 _logger.LogInformation("redis连接成功");
-            _logger.LogInformation($"当前redis数据库索引为{_redis.DatabaseIndex()}");
+            _logger.LogInformation($"当前redis数据库索引为{_redis.DatabaseIndex().ToString()}");
             return Ok(_redis.DatabaseIndex());
         }
         [HttpGet(Name ="CastId")]
