@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace AutoFac.Models
 {
-    public class BlogContext:DbContext
+    public class BlogContext:DbContext      
     {
         //private readonly string connectionstring;
         public DbSet<User> Users { get; set; }
         public BlogContext(DbContextOptions<BlogContext> options):base(options)
         {
-           // connectionstring = _connectionstring;
+           // connectionstring = _connectionstring;                                              
         }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder builder)

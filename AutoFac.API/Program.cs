@@ -68,7 +68,8 @@ builder.Services.AddScoped(typeof(IJobService),typeof(JobService));
 builder.Services.AddAutoMapperSetup();
 builder.Services.AddLoggerSetup();
 #region quartzÒÔ¼°quartz uiÅäÖÃ
-builder.Services.AddQuartz(p=> { });
+builder.Services.AddQuartz(p=> { 
+});
 builder.Services.AddQuartzServer(p => {
    
 });

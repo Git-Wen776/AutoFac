@@ -15,5 +15,7 @@ namespace AutoFac.Models
         public int Age { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
+        public string Pwd { get; set; }
+        public string ImgUrl { get; set; }
     }
 }
