@@ -112,5 +112,15 @@ namespace AutoFac.Repository
                 throw new ArgumentNullException($"{nameof(where)} or {nameof(include)} is null");
             return _context.Set<T>().Where(where).Include(include);
         }
+
+        public IQueryable Includes<TProperty>(Expression<Func<T,TProperty>>[] includes)
+        {
+            var query=_context.Set<T>().Include(includes[0]);
+            foreach(var include in includes)
+            {
+                query.Include(include);
+            }
+            return query;
+        }
     }
 }
