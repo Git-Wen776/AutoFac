@@ -12,5 +12,7 @@ namespace AutoFac.Extentions.Redis
         int DatabaseIndex();
         bool IsConnected();
         Task<RedisValue> strGet(string key);
+
+
     }
 }

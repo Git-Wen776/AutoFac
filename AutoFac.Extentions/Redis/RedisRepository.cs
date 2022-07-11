@@ -34,5 +34,7 @@ namespace AutoFac.Extentions.Redis
         {
             return _work.IsConnected();
         }
+
+        
     }
 }

@@ -63,6 +63,7 @@ namespace AutoFac.API.Controllers
 
         [HttpGet(Name = "SetCahce")]
         public async Task<ActionResult> SetCahce() {
+            
             var t= await _cache.GetOrCreateAsync<string>("wen", 
               async (p) => { return await _redis.strGet("person"); }
             ,10,3);

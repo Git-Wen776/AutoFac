@@ -15,12 +15,11 @@ namespace AutoFac.Extentions.AutoMapperConfig
         {
             service.AddAutoMapper(p =>
             {    
-                var profiles = Assembly.GetExecutingAssembly().GetTypes().
-                Where(a=>a.Name.EndsWith("Profile"));
-                foreach (var profile in profiles)
+                Assembly.GetExecutingAssembly().GetTypes().
+                Where(a => a.Name.EndsWith("Profile")).ToList().ForEach(_ =>
                 {
-                    p.AddProfile(profile);
-                }
+                    p.AddProfile(_);
+                });
                 p.SourceMemberNamingConvention = new PascalCaseNamingConvention();
             });
         }
