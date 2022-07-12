@@ -51,7 +51,7 @@ namespace AutoFac.API.Controllers
         [HttpGet(Name = "Rediskey")]
         public async Task<ActionResult> Rediskey()
         {
-            string p= await _redis.strGet("person");
+            string p = await _cache.GetStringAsync("person");
             return Ok(p);
         }
 
